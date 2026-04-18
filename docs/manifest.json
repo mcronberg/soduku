@@ -8,7 +8,10 @@
     "orientation": "portrait",
     "theme_color": "#4a90d9",
     "background_color": "#ffffff",
-    "categories": ["games", "puzzle"],
+    "categories": [
+        "games",
+        "puzzle"
+    ],
     "icons": [
         {
             "src": "icons/icon.svg",
