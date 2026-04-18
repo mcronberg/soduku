@@ -103,16 +103,16 @@ function setupEventListeners() {
         btn.addEventListener('touchstart', (e) => {
             // Only handle single touch
             if (e.touches.length !== 1) return;
-            
+
             touchDragNum = btn.dataset.num;
             btn.classList.add('dragging');
-            
+
             // Create ghost element
             touchGhost = document.createElement('div');
             touchGhost.className = 'touch-drag-ghost';
             touchGhost.textContent = touchDragNum === '0' ? '✕' : touchDragNum;
             document.body.appendChild(touchGhost);
-            
+
             const touch = e.touches[0];
             touchGhost.style.left = `${touch.clientX - 25}px`;
             touchGhost.style.top = `${touch.clientY - 25}px`;
@@ -121,15 +121,15 @@ function setupEventListeners() {
         btn.addEventListener('touchmove', (e) => {
             if (!touchGhost) return;
             e.preventDefault(); // Prevent scrolling while dragging
-            
+
             const touch = e.touches[0];
             touchGhost.style.left = `${touch.clientX - 25}px`;
             touchGhost.style.top = `${touch.clientY - 25}px`;
-            
+
             // Find cell under finger
             const elemBelow = document.elementFromPoint(touch.clientX, touch.clientY);
             const cell = elemBelow?.closest('.cell');
-            
+
             // Update highlight
             if (touchCurrentCell && touchCurrentCell !== cell) {
                 touchCurrentCell.classList.remove('drag-over');
@@ -144,7 +144,7 @@ function setupEventListeners() {
 
         btn.addEventListener('touchend', () => {
             btn.classList.remove('dragging');
-            
+
             if (touchCurrentCell && touchDragNum !== null) {
                 const row = parseInt(touchCurrentCell.dataset.row, 10);
                 const col = parseInt(touchCurrentCell.dataset.col, 10);
@@ -152,7 +152,7 @@ function setupEventListeners() {
                 touchCurrentCell.classList.remove('drag-over');
                 handleCellInput(row, col, num === 0 ? null : num);
             }
-            
+
             // Cleanup
             if (touchGhost) {
                 touchGhost.remove();
