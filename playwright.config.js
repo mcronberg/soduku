@@ -7,14 +7,14 @@ export default defineConfig({
     retries: process.env.CI ? 2 : 0,
     workers: process.env.CI ? 1 : undefined,
     reporter: [['html', { open: 'never' }]],
-    
+
     /* Start local server before running tests */
     webServer: {
         command: 'npx serve docs -l 3333',
         url: 'http://localhost:3333',
         reuseExistingServer: !process.env.CI,
     },
-    
+
     use: {
         baseURL: 'http://localhost:3333',
         trace: 'on-first-retry',
@@ -37,7 +37,7 @@ export default defineConfig({
         // Tablet viewport (using Chrome)
         {
             name: 'tablet',
-            use: { 
+            use: {
                 ...devices['Desktop Chrome'],
                 viewport: { width: 768, height: 1024 },
             },

@@ -35,17 +35,17 @@ test.describe('Mobile Layout', () => {
 
     test('should display correctly on mobile', async ({ page }) => {
         await page.goto('/');
-        
+
         const startScreen = page.locator('#startScreen');
         await expect(startScreen).toBeVisible();
-        
+
         // Start a game
         await page.locator('#newGameBtn').click();
-        
+
         // Board should be visible
         const board = page.locator('#sudokuBoard');
         await expect(board).toBeVisible();
-        
+
         // Number pad should be visible
         const numPad = page.locator('.number-pad');
         await expect(numPad).toBeVisible();
@@ -54,10 +54,10 @@ test.describe('Mobile Layout', () => {
     test('board should fit within viewport on mobile', async ({ page }) => {
         await page.goto('/');
         await page.locator('#newGameBtn').click();
-        
+
         const board = page.locator('#sudokuBoard');
         const box = await board.boundingBox();
-        
+
         expect(box.width).toBeLessThanOrEqual(375);
     });
 });
@@ -67,9 +67,9 @@ test.describe('Tablet Layout', () => {
 
     test('should display correctly on tablet', async ({ page }) => {
         await page.goto('/');
-        
+
         await page.locator('#newGameBtn').click();
-        
+
         const board = page.locator('#sudokuBoard');
         await expect(board).toBeVisible();
     });
@@ -80,9 +80,9 @@ test.describe('Desktop Layout', () => {
 
     test('should display correctly on desktop', async ({ page }) => {
         await page.goto('/');
-        
+
         await page.locator('#newGameBtn').click();
-        
+
         const board = page.locator('#sudokuBoard');
         await expect(board).toBeVisible();
     });

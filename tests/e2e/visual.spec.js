@@ -23,10 +23,10 @@ test.describe('Visual Regression', () => {
     test('game board 9x9 light mode', async ({ page }) => {
         await page.goto('/');
         await page.locator('#newGameBtn').click();
-        
+
         // Wait for board to render
         await page.waitForSelector('#sudokuBoard .cell');
-        
+
         await expect(page).toHaveScreenshot('game-9x9-light.png', {
             maxDiffPixelRatio: 0.1
         });
@@ -36,9 +36,9 @@ test.describe('Visual Regression', () => {
         await page.goto('/');
         await page.locator('#gridSize').selectOption('4');
         await page.locator('#newGameBtn').click();
-        
+
         await page.waitForSelector('#sudokuBoard .cell');
-        
+
         await expect(page).toHaveScreenshot('game-4x4-kids.png', {
             maxDiffPixelRatio: 0.1
         });
@@ -47,7 +47,7 @@ test.describe('Visual Regression', () => {
     test('help modal', async ({ page }) => {
         await page.goto('/');
         await page.locator('#helpBtn').click();
-        
+
         await expect(page).toHaveScreenshot('help-modal.png', {
             maxDiffPixelRatio: 0.1
         });
@@ -68,7 +68,7 @@ test.describe('Mobile Visual Regression', () => {
         await page.goto('/');
         await page.locator('#newGameBtn').click();
         await page.waitForSelector('#sudokuBoard .cell');
-        
+
         await expect(page).toHaveScreenshot('mobile-game.png', {
             maxDiffPixelRatio: 0.1
         });
