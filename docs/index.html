@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <link rel="stylesheet" href="css/themes.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <h1 class="logo">🧩 Sudoku</h1>
+            <div class="header-actions">
+                <button id="helpBtn" class="btn btn-icon" title="How to Play">?</button>
+                <button id="themeBtn" class="btn btn-icon" title="Toggle Theme">🌙</button>
+            </div>
+        </header>
+
+        <!-- Start Screen -->
+        <main id="startScreen" class="screen">
+            <div class="start-container">
+                <h2>Play Sudoku</h2>
+                <p class="tagline">Fill the grid and test your logic skills.</p>
+
+                <div class="start-options">
+                    <div class="option-card">
+                        <h3>New Game</h3>
+                        <p>Choose your grid size and difficulty to get started.</p>
+                        <div class="difficulty-select">
+                            <label for="gridSize">Size:</label>
+                            <select id="gridSize">
+                                <option value="4">4×4 (Kids)</option>
+                                <option value="9" selected>9×9 (Standard)</option>
+                            </select>
+                        </div>
+                        <div class="difficulty-select">
+                            <label for="difficulty">Difficulty:</label>
+                            <select id="difficulty">
+                                <option value="easy">Easy</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="hard">Hard</option>
+                            </select>
+                        </div>
+                        <button id="newGameBtn" class="btn btn-primary">Create Game</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Game Screen -->
+        <main id="gameScreen" class="screen hidden">
+            <div class="game-container">
+                <!-- Game Info Bar -->
+                <div class="game-info">
+                    <div class="game-difficulty">
+                        <span id="displayDifficulty">Medium</span>
+                    </div>
+                </div>
+
+                <!-- Sudoku Board -->
+                <div class="board-wrapper">
+                    <div id="sudokuBoard" class="sudoku-board"></div>
+                </div>
+
+                <!-- Timer -->
+                <div class="game-timer">
+                    <span id="liveTimer">0:00</span>
+                </div>
+
+                <!-- Number Pad -->
+                <div class="number-pad">
+                    <button class="num-btn" data-num="1">1</button>
+                    <button class="num-btn" data-num="2">2</button>
+                    <button class="num-btn" data-num="3">3</button>
+                    <button class="num-btn" data-num="4">4</button>
+                    <button class="num-btn" data-num="5">5</button>
+                    <button class="num-btn" data-num="6">6</button>
+                    <button class="num-btn" data-num="7">7</button>
+                    <button class="num-btn" data-num="8">8</button>
+                    <button class="num-btn" data-num="9">9</button>
+                    <button class="num-btn num-btn-clear" data-num="0">✕</button>
+                </div>
+
+                <!-- Actions -->
+                <div class="game-actions">
+                    <button id="leaveGameBtn" class="btn btn-secondary">New Game</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- How to Play Modal -->
+        <div id="helpModal" class="modal hidden">
+            <div class="modal-content">
+                <button class="modal-close" id="closeHelpBtn">&times;</button>
+                <h2>How to Play Sudoku</h2>
+
+                <div class="help-section">
+                    <h3>🎯 Objective</h3>
+                    <p>Fill every cell in the grid so that each row, column, and box contains all digits exactly once.
+                    </p>
+                    <ul>
+                        <li><strong>9×9 (Standard)</strong> — use digits 1–9, boxes are 3×3</li>
+                        <li><strong>4×4 (Kids)</strong> — use digits 1–4, boxes are 2×2</li>
+                    </ul>
+                    <p>Every puzzle has exactly one correct solution.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>📜 Rules</h3>
+                    <ul>
+                        <li>Each row must contain all digits with no repetition</li>
+                        <li>Each column must contain all digits with no repetition</li>
+                        <li>Each box must contain all digits with no repetition</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎮 Controls</h3>
+                    <ul>
+                        <li><strong>Click</strong> a cell to select it</li>
+                        <li><strong>Type a number (1-9)</strong> or use the number pad</li>
+                        <li><strong>Drag &amp; drop</strong> a number from the pad onto a cell</li>
+                        <li><strong>Press Delete/Backspace</strong> or click ✕ to clear a cell</li>
+                        <li><strong>Arrow keys</strong> to navigate between cells</li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎨 Visual Aids</h3>
+                    <p>When you select a cell, related cells are highlighted:</p>
+                    <ul>
+                        <li><strong>Selected cell</strong> — Strong blue background</li>
+                        <li><strong>Same row / column / box</strong> — Light blue highlight</li>
+                    </ul>
+                    <p>A small dot under a number marks your last move.</p>
+                </div>
+
+                <div class="help-section help-footer">
+                    <a href="https://en.wikipedia.org/wiki/Sudoku" target="_blank" rel="noopener">Learn more about
+                        Sudoku on Wikipedia ↗</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion Modal -->
+        <div id="completionModal" class="modal hidden">
+            <div class="modal-content completion-content">
+                <h2>🎉 Puzzle Completed!</h2>
+                <p>Congratulations! You solved the Sudoku!</p>
+                <p class="completion-time">Time: <strong id="completionTime">0:00</strong></p>
+                <div class="completion-actions">
+                    <button id="newGameAfterWin" class="btn btn-primary">New Game</button>
+                    <button id="closeCompletionBtn" class="btn btn-secondary">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
