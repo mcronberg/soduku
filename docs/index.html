@@ -7,22 +7,79 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Sudoku</title>
-    <link rel="stylesheet" href="css/themes.css?v=1.0.0">
-    <link rel="stylesheet" href="css/style.css?v=1.0.0">
+
+    <!-- SEO Meta Tags -->
+    <title>Sudoku - Free Online Puzzle Game | Play 4x4 & 9x9 Grids</title>
+    <meta name="description"
+        content="Play free Sudoku puzzles online. Choose from easy, medium, or hard difficulty levels. Features 4x4 kids mode and classic 9x9 grids. No account required, works offline.">
+    <meta name="keywords" content="sudoku, puzzle, game, free, online, 9x9, 4x4, kids, logic, brain teaser">
+    <meta name="author" content="Michell Cronberg">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mcronberg.github.io/Soduku/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mcronberg.github.io/Soduku/">
+    <meta property="og:title" content="Sudoku - Free Online Puzzle Game">
+    <meta property="og:description"
+        content="Play free Sudoku puzzles online. Easy, medium, and hard difficulty. 4x4 kids mode and classic 9x9 grids.">
+    <meta property="og:image" content="https://mcronberg.github.io/Soduku/og-image.png">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://mcronberg.github.io/Soduku/">
+    <meta name="twitter:title" content="Sudoku - Free Online Puzzle Game">
+    <meta name="twitter:description"
+        content="Play free Sudoku puzzles online. Easy, medium, and hard difficulty. 4x4 kids mode and classic 9x9 grids.">
+    <meta name="twitter:image" content="https://mcronberg.github.io/Soduku/og-image.png">
+
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#4a90d9">
+    <meta name="msapplication-TileColor" content="#4a90d9">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+
+    <link rel="stylesheet" href="css/themes.css?v=1.0.1">
+    <link rel="stylesheet" href="css/style.css?v=1.0.1">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Sudoku",
+        "description": "Free online Sudoku puzzle game with multiple difficulty levels",
+        "url": "https://mcronberg.github.io/Soduku/",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Person",
+            "name": "Michell Cronberg"
+        }
+    }
+    </script>
 </head>
 
 <body>
     <div id="app">
         <!-- Header -->
-        <header class="header">
+        <header class="header" role="banner">
             <h1 class="logo">🧩 Sudoku</h1>
-            <div class="header-actions">
-                <button id="helpBtn" class="btn btn-icon" title="How to Play">?</button>
-                <button id="themeBtn" class="btn btn-icon" title="Toggle Theme">🌙</button>
-            </div>
+            <nav class="header-actions" aria-label="Site controls">
+                <button id="helpBtn" class="btn btn-icon" title="How to Play" aria-label="How to Play">?</button>
+                <button id="themeBtn" class="btn btn-icon" title="Toggle Theme"
+                    aria-label="Toggle dark/light theme">🌙</button>
+            </nav>
         </header>
 
         <!-- Start Screen -->
@@ -68,26 +125,26 @@
 
                 <!-- Sudoku Board -->
                 <div class="board-wrapper">
-                    <div id="sudokuBoard" class="sudoku-board"></div>
+                    <div id="sudokuBoard" class="sudoku-board" role="grid" aria-label="Sudoku puzzle board"></div>
                 </div>
 
                 <!-- Timer -->
-                <div class="game-timer">
-                    <span id="liveTimer">0:00</span>
+                <div class="game-timer" aria-label="Game timer">
+                    <span id="liveTimer" aria-live="polite" aria-atomic="true">0:00</span>
                 </div>
 
                 <!-- Number Pad -->
-                <div class="number-pad">
-                    <button class="num-btn" data-num="1">1</button>
-                    <button class="num-btn" data-num="2">2</button>
-                    <button class="num-btn" data-num="3">3</button>
-                    <button class="num-btn" data-num="4">4</button>
-                    <button class="num-btn" data-num="5">5</button>
-                    <button class="num-btn" data-num="6">6</button>
-                    <button class="num-btn" data-num="7">7</button>
-                    <button class="num-btn" data-num="8">8</button>
-                    <button class="num-btn" data-num="9">9</button>
-                    <button class="num-btn num-btn-clear" data-num="0">✕</button>
+                <div class="number-pad" role="group" aria-label="Number pad">
+                    <button class="num-btn" data-num="1" aria-label="Enter 1">1</button>
+                    <button class="num-btn" data-num="2" aria-label="Enter 2">2</button>
+                    <button class="num-btn" data-num="3" aria-label="Enter 3">3</button>
+                    <button class="num-btn" data-num="4" aria-label="Enter 4">4</button>
+                    <button class="num-btn" data-num="5" aria-label="Enter 5">5</button>
+                    <button class="num-btn" data-num="6" aria-label="Enter 6">6</button>
+                    <button class="num-btn" data-num="7" aria-label="Enter 7">7</button>
+                    <button class="num-btn" data-num="8" aria-label="Enter 8">8</button>
+                    <button class="num-btn" data-num="9" aria-label="Enter 9">9</button>
+                    <button class="num-btn num-btn-clear" data-num="0" aria-label="Clear cell">✕</button>
                 </div>
 
                 <!-- Actions -->
@@ -98,10 +155,10 @@
         </main>
 
         <!-- How to Play Modal -->
-        <div id="helpModal" class="modal hidden">
+        <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
             <div class="modal-content">
-                <button class="modal-close" id="closeHelpBtn">&times;</button>
-                <h2>How to Play Sudoku</h2>
+                <button class="modal-close" id="closeHelpBtn" aria-label="Close help">&times;</button>
+                <h2 id="helpModalTitle">How to Play Sudoku</h2>
 
                 <div class="help-section">
                     <h3>🎯 Objective</h3>
@@ -152,9 +209,10 @@
         </div>
 
         <!-- Completion Modal -->
-        <div id="completionModal" class="modal hidden">
+        <div id="completionModal" class="modal hidden" role="dialog" aria-modal="true"
+            aria-labelledby="completionModalTitle">
             <div class="modal-content completion-content">
-                <h2>🎉 Puzzle Completed!</h2>
+                <h2 id="completionModalTitle">🎉 Puzzle Completed!</h2>
                 <p>Congratulations! You solved the Sudoku!</p>
                 <p class="completion-time">Time: <strong id="completionTime">0:00</strong></p>
                 <div class="completion-actions">
@@ -165,10 +223,10 @@
         </div>
 
         <!-- Toast Notifications -->
-        <div id="toastContainer" class="toast-container"></div>
+        <div id="toastContainer" class="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <script type="module" src="js/app.js?v=1.0.0"></script>
+    <script type="module" src="js/app.js?v=1.0.1"></script>
 </body>
 
 </html>
