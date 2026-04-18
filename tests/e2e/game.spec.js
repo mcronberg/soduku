@@ -31,6 +31,36 @@ test.describe('Game Start', () => {
         await expect(cells).toHaveCount(16);
     });
 
+    test('should start 6x6 Mini Sudoku game', async ({ page }) => {
+        await page.locator('#gridSize').selectOption('6');
+        await page.locator('#newGameBtn').click();
+
+        // Game screen should be visible
+        const gameScreen = page.locator('#gameScreen');
+        await expect(gameScreen).toBeVisible();
+
+        // Board should have 36 cells
+        const cells = page.locator('#sudokuBoard .cell');
+        await expect(cells).toHaveCount(36);
+    });
+
+    test('should show only numbers 1-6 for 6x6 game', async ({ page }) => {
+        await page.locator('#gridSize').selectOption('6');
+        await page.locator('#newGameBtn').click();
+
+        // Number buttons 1-6 should be visible
+        for (let i = 1; i <= 6; i++) {
+            const btn = page.locator(`.num-btn[data-num="${i}"]`);
+            await expect(btn).toBeVisible();
+        }
+
+        // Number buttons 7-9 should be hidden
+        for (let i = 7; i <= 9; i++) {
+            const btn = page.locator(`.num-btn[data-num="${i}"]`);
+            await expect(btn).toBeHidden();
+        }
+    });
+
     test('should show only numbers 1-4 for 4x4 game', async ({ page }) => {
         await page.locator('#gridSize').selectOption('4');
         await page.locator('#newGameBtn').click();

@@ -254,6 +254,12 @@ h3 { font-size: 1rem; }
   max-width: 300px;
 }
 
+/* 6x6 mini grid */
+.sudoku-board[data-grid-size="6"] {
+  grid-template-columns: repeat(6, 1fr);
+  max-width: 380px;
+}
+
 .cell {
   position: relative;
   aspect-ratio: 1;
@@ -270,13 +276,23 @@ h3 { font-size: 1rem; }
 }
 
 /* Thicker borders for 3x3 boxes (9x9 grid) */
-.sudoku-board:not([data-grid-size="4"]) .cell[data-col="2"],
-.sudoku-board:not([data-grid-size="4"]) .cell[data-col="5"] {
+.sudoku-board[data-grid-size="9"] .cell[data-col="2"],
+.sudoku-board[data-grid-size="9"] .cell[data-col="5"] {
   border-right: 2px solid var(--board-border);
 }
 
-.sudoku-board:not([data-grid-size="4"]) .cell[data-row="2"],
-.sudoku-board:not([data-grid-size="4"]) .cell[data-row="5"] {
+.sudoku-board[data-grid-size="9"] .cell[data-row="2"],
+.sudoku-board[data-grid-size="9"] .cell[data-row="5"] {
+  border-bottom: 2px solid var(--board-border);
+}
+
+/* Thicker borders for 3x2 boxes (6x6 mini grid) - 3 cols, 2 rows per box */
+.sudoku-board[data-grid-size="6"] .cell[data-col="2"] {
+  border-right: 2px solid var(--board-border);
+}
+
+.sudoku-board[data-grid-size="6"] .cell[data-row="1"],
+.sudoku-board[data-grid-size="6"] .cell[data-row="3"] {
   border-bottom: 2px solid var(--board-border);
 }
 

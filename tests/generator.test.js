@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { generateSudoku, validateMove, getTestPuzzle, TEST_PUZZLES } from '../docs/js/generator.js';
+import { generateSudoku, validateMove, getTestPuzzle, TEST_PUZZLES, getBoxDimensions } from '../docs/js/generator.js';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -10,7 +10,7 @@ function hasNoDuplicates(arr) {
 }
 
 function assertValidGrid(grid, size) {
-    const boxSize = Math.sqrt(size);
+    const { boxRows, boxCols } = getBoxDimensions(size);
 
     // All cells filled (solution check)
     for (let r = 0; r < size; r++)
@@ -26,12 +26,14 @@ function assertValidGrid(grid, size) {
     for (let c = 0; c < size; c++)
         assert(hasNoDuplicates(grid.map(row => row[c])), `Duplicate in col ${c}`);
 
-    // Boxes
-    for (let br = 0; br < boxSize; br++) {
-        for (let bc = 0; bc < boxSize; bc++) {
+    // Boxes (support rectangular boxes for 6x6)
+    const numBoxRows = size / boxRows;
+    const numBoxCols = size / boxCols;
+    for (let br = 0; br < numBoxRows; br++) {
+        for (let bc = 0; bc < numBoxCols; bc++) {
             const box = [];
-            for (let r = br * boxSize; r < (br + 1) * boxSize; r++)
-                for (let c = bc * boxSize; c < (bc + 1) * boxSize; c++)
+            for (let r = br * boxRows; r < (br + 1) * boxRows; r++)
+                for (let c = bc * boxCols; c < (bc + 1) * boxCols; c++)
                     box.push(grid[r][c]);
             assert(hasNoDuplicates(box), `Duplicate in box [${br}][${bc}]`);
         }
@@ -60,6 +62,21 @@ test('4x4 easy — solution is a valid complete grid', () => {
     assertValidGrid(solution, 4);
 });
 
+test('6x6 easy — solution is a valid complete grid', () => {
+    const { solution } = generateSudoku({ difficulty: 'easy', gridSize: 6 });
+    assertValidGrid(solution, 6);
+});
+
+test('6x6 medium — solution is a valid complete grid', () => {
+    const { solution } = generateSudoku({ difficulty: 'medium', gridSize: 6 });
+    assertValidGrid(solution, 6);
+});
+
+test('6x6 hard — solution is a valid complete grid', () => {
+    const { solution } = generateSudoku({ difficulty: 'hard', gridSize: 6 });
+    assertValidGrid(solution, 6);
+});
+
 test('9x9 easy — puzzle has 30–35 empty cells', () => {
     const { puzzle } = generateSudoku({ difficulty: 'easy', gridSize: 9 });
     const empty = puzzle.flat().filter(v => v === 0).length;
@@ -84,6 +101,12 @@ test('4x4 easy — puzzle has 6–8 empty cells', () => {
     assert(empty >= 6 && empty <= 8, `Empty cells: ${empty}`);
 });
 
+test('6x6 medium — puzzle has 18–22 empty cells', () => {
+    const { puzzle } = generateSudoku({ difficulty: 'medium', gridSize: 6 });
+    const empty = puzzle.flat().filter(v => v === 0).length;
+    assert(empty >= 18 && empty <= 22, `Empty cells: ${empty}`);
+});
+
 test('puzzle prefilled cells match solution', () => {
     const { puzzle, solution } = generateSudoku({ difficulty: 'medium', gridSize: 9 });
     for (let r = 0; r < 9; r++)
@@ -94,7 +117,7 @@ test('puzzle prefilled cells match solution', () => {
 });
 
 test('invalid gridSize throws', () => {
-    assert.throws(() => generateSudoku({ gridSize: 5 }), /perfect square/);
+    assert.throws(() => generateSudoku({ gridSize: 5 }), /4, 6, or 9/);
 });
 
 // ─── validateMove ────────────────────────────────────────────────────────────
@@ -130,6 +153,11 @@ test('9x9 test puzzle — solution is valid', () => {
     assertValidGrid(solution, 9);
 });
 
+test('6x6 test puzzle — solution is valid', () => {
+    const { solution } = getTestPuzzle(6);
+    assertValidGrid(solution, 6);
+});
+
 test('4x4 test puzzle — emptyCells match solution', () => {
     const { solution, emptyCells } = getTestPuzzle(4);
     for (const { row, col, value } of emptyCells) {
@@ -163,5 +191,5 @@ test('9x9 test puzzle — puzzle has zeros at emptyCells positions', () => {
 });
 
 test('getTestPuzzle — throws for invalid size', () => {
-    assert.throws(() => getTestPuzzle(6), /No test puzzle/);
+    assert.throws(() => getTestPuzzle(5), /No test puzzle/);
 });

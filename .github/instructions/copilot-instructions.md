@@ -26,6 +26,11 @@ docs/
     app.js            # Main application entry point
 tests/
   generator.test.js   # Unit tests (Node.js test runner)
+  e2e/
+    theme.spec.js     # Theme toggle E2E tests
+    responsive.spec.js # Responsive design E2E tests
+    game.spec.js      # Game functionality E2E tests
+    visual.spec.js    # Visual regression tests
 ```
 
 ## Responsive Design Requirements
@@ -52,7 +57,7 @@ Use CSS media queries and flexible layouts:
 - Add JSDoc comments for public functions
 - Keep functions small and focused
 
-## Cache Busting
+## Cache Busting & Versioning
 
 All CSS and JS files use version query strings to prevent browser caching:
 
@@ -62,7 +67,9 @@ All CSS and JS files use version query strings to prevent browser caching:
 <script type="module" src="js/app.js?v=1.0.0"></script>
 ```
 
-**When making changes:** Update the version number (e.g., `?v=1.0.1`) in `index.html` to force browsers to fetch the new files.
+**When making changes:** 
+1. Update the version number in `index.html` query strings (e.g., `?v=1.0.1` → `?v=1.0.2`)
+2. Update the version in `package.json` to match
 
 The HTML also includes no-cache meta tags:
 ```html
@@ -75,12 +82,17 @@ The HTML also includes no-cache meta tags:
 
 Run tests with Node.js 22+ (no dependencies):
 ```bash
-node --test tests/generator.test.js
+npm test              # Unit tests only
+npm run test:e2e      # E2E tests only  
+npm run test:all      # All tests
 ```
 
-**Static test puzzles** are available via `getTestPuzzle(4)` or `getTestPuzzle(9)` from `generator.js`. Use these for UI/automation testing - they have known solutions that never change.
+**Static test puzzles** are available via `getTestPuzzle(4)`, `getTestPuzzle(6)`, or `getTestPuzzle(9)` from `generator.js`. Use these for UI/automation testing - they have known solutions that never change.
 
-**Important:** After any code change that affects game logic, run all tests to verify nothing is broken. All tests must pass before considering a change complete.
+**Important:** 
+- After any code change that affects game logic, run all tests to verify nothing is broken
+- When adding new features, create corresponding unit tests in `tests/generator.test.js` and E2E tests in `tests/e2e/`
+- All tests must pass before considering a change complete
 
 ## Documentation
 

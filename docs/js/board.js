@@ -4,6 +4,21 @@
  */
 
 /**
+ * Get box dimensions for a given grid size
+ * @param {number} size - Grid size
+ * @returns {{ boxRows: number, boxCols: number }}
+ */
+function getBoxDimensions(size) {
+    if (size === 6) {
+        // Mini Sudoku: 6x6 with 3x2 boxes (3 cols, 2 rows)
+        return { boxRows: 2, boxCols: 3 };
+    }
+    // Standard square boxes for 4x4 and 9x9
+    const boxSize = Math.sqrt(size);
+    return { boxRows: boxSize, boxCols: boxSize };
+}
+
+/**
  * Create a board renderer
  * @param {HTMLElement} container - Container element for the board
  * @param {Object} options
@@ -13,6 +28,7 @@
  */
 export function createBoardRenderer(container, options = {}) {
     const { onCellSelect, gridSize = 9 } = options;
+    const { boxRows, boxCols } = getBoxDimensions(gridSize);
 
     let cells = [];
     let selectedCell = null;
@@ -133,9 +149,8 @@ export function createBoardRenderer(container, options = {}) {
      * Highlight cells in same row, column, and box
      */
     function highlightRelatedCells(row, col) {
-        const boxSize = Math.sqrt(gridSize);
-        const boxRow = Math.floor(row / boxSize) * boxSize;
-        const boxCol = Math.floor(col / boxSize) * boxSize;
+        const startBoxRow = Math.floor(row / boxRows) * boxRows;
+        const startBoxCol = Math.floor(col / boxCols) * boxCols;
 
         for (let r = 0; r < gridSize; r++) {
             for (let c = 0; c < gridSize; c++) {
@@ -143,8 +158,8 @@ export function createBoardRenderer(container, options = {}) {
 
                 const inRow = r === row;
                 const inCol = c === col;
-                const inBox = r >= boxRow && r < boxRow + boxSize &&
-                    c >= boxCol && c < boxCol + boxSize;
+                const inBox = r >= startBoxRow && r < startBoxRow + boxRows &&
+                    c >= startBoxCol && c < startBoxCol + boxCols;
 
                 if (inRow || inCol || inBox) {
                     getCellElement(r, c)?.classList.add('cell-highlighted');

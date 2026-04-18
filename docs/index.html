@@ -9,10 +9,10 @@
     <meta http-equiv="Expires" content="0">
 
     <!-- SEO Meta Tags -->
-    <title>Sudoku - Free Online Puzzle Game | Play 4x4 & 9x9 Grids</title>
+    <title>Sudoku - Free Online Puzzle Game | Play 4x4, 6x6 & 9x9 Grids</title>
     <meta name="description"
-        content="Play free Sudoku puzzles online. Choose from easy, medium, or hard difficulty levels. Features 4x4 kids mode and classic 9x9 grids. No account required, works offline.">
-    <meta name="keywords" content="sudoku, puzzle, game, free, online, 9x9, 4x4, kids, logic, brain teaser">
+        content="Play free Sudoku puzzles online. Choose from easy, medium, or hard difficulty levels. Features 4x4 kids mode, 6x6 Mini Sudoku, and classic 9x9 grids. No account required, works offline.">
+    <meta name="keywords" content="sudoku, puzzle, game, free, online, 9x9, 6x6, 4x4, kids, mini sudoku, logic, brain teaser">
     <meta name="author" content="Michell Cronberg">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://mcronberg.github.io/Soduku/">
@@ -42,8 +42,8 @@
     <link rel="apple-touch-icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
 
-    <link rel="stylesheet" href="css/themes.css?v=1.0.1">
-    <link rel="stylesheet" href="css/style.css?v=1.0.1">
+    <link rel="stylesheet" href="css/themes.css?v=1.0.2">
+    <link rel="stylesheet" href="css/style.css?v=1.0.2">
     <link rel="icon"
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
 
@@ -96,6 +96,7 @@
                             <label for="gridSize">Size:</label>
                             <select id="gridSize">
                                 <option value="4">4×4 (Kids)</option>
+                                <option value="6">6×6 (Mini)</option>
                                 <option value="9" selected>9×9 (Standard)</option>
                             </select>
                         </div>
@@ -166,6 +167,7 @@
                     </p>
                     <ul>
                         <li><strong>9×9 (Standard)</strong> — use digits 1–9, boxes are 3×3</li>
+                        <li><strong>6×6 (Mini)</strong> — use digits 1–6, boxes are 3×2</li>
                         <li><strong>4×4 (Kids)</strong> — use digits 1–4, boxes are 2×2</li>
                     </ul>
                     <p>Every puzzle has exactly one correct solution.</p>
@@ -226,7 +228,7 @@
         <div id="toastContainer" class="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <script type="module" src="js/app.js?v=1.0.1"></script>
+    <script type="module" src="js/app.js?v=1.0.2"></script>
 </body>
 
 </html>

@@ -14,7 +14,8 @@ A free, client-side Sudoku game that runs entirely in the browser — no server,
 - **Guaranteed Unique Solution** - Every puzzle has exactly one correct answer
 - **Move Validation** - Incorrect numbers are rejected with a shake animation
 - **Live Timer** - Tracks your solve time, displayed in the completion screen
-- **Three Difficulty Levels** - Easy, Medium, and Hard (4×4 and 9×9 grids)
+- **Three Difficulty Levels** - Easy, Medium, and Hard
+- **Three Grid Sizes** - 4×4 (Kids), 6×6 (Mini Sudoku), and 9×9 (Standard)
 - **Dark/Light Theme** - Automatic system preference detection or manual toggle
 - **Responsive Design** - Works on mobile, tablet, and desktop
 - **No Account Required** - Open and play
@@ -54,7 +55,7 @@ docs/
     theme.js     # Dark/light theme toggle
     app.js       # Main application logic
 tests/
-  generator.test.js  # 20 unit tests for puzzle generation and validation
+  generator.test.js  # 25 unit tests for puzzle generation and validation
   e2e/
     theme.spec.js      # Theme toggle tests (light/dark mode)
     responsive.spec.js # Responsive design tests

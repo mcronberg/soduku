@@ -5,6 +5,21 @@
  */
 
 /**
+ * Get box dimensions for a given grid size
+ * @param {number} size - Grid size
+ * @returns {{ boxRows: number, boxCols: number }}
+ */
+function getBoxDimensions(size) {
+    if (size === 6) {
+        // Mini Sudoku: 6x6 with 3x2 boxes (3 cols, 2 rows)
+        return { boxRows: 2, boxCols: 3 };
+    }
+    // Standard square boxes for 4x4 and 9x9
+    const boxSize = Math.sqrt(size);
+    return { boxRows: boxSize, boxCols: boxSize };
+}
+
+/**
  * Difficulty settings - number of cells to remove from complete puzzle
  * Values are for 9x9 grid (81 cells)
  */
@@ -12,6 +27,15 @@ const DIFFICULTY_SETTINGS = {
     easy: { minRemove: 30, maxRemove: 35 },
     medium: { minRemove: 40, maxRemove: 45 },
     hard: { minRemove: 50, maxRemove: 55 }
+};
+
+/**
+ * Difficulty settings for 6x6 Mini Sudoku (36 cells)
+ */
+const DIFFICULTY_SETTINGS_6x6 = {
+    easy: { minRemove: 14, maxRemove: 18 },
+    medium: { minRemove: 18, maxRemove: 22 },
+    hard: { minRemove: 22, maxRemove: 26 }
 };
 
 /**
@@ -30,7 +54,7 @@ const DIFFICULTY_SETTINGS_4x4 = {
  */
 function generateSolution(size = 9) {
     const grid = Array(size).fill(null).map(() => Array(size).fill(0));
-    const boxSize = Math.sqrt(size);
+    const { boxRows, boxCols } = getBoxDimensions(size);
 
     function isValid(grid, row, col, num) {
         // Check row
@@ -43,11 +67,11 @@ function generateSolution(size = 9) {
             if (grid[y][col] === num) return false;
         }
 
-        // Check box
-        const boxRow = Math.floor(row / boxSize) * boxSize;
-        const boxCol = Math.floor(col / boxSize) * boxSize;
-        for (let y = boxRow; y < boxRow + boxSize; y++) {
-            for (let x = boxCol; x < boxCol + boxSize; x++) {
+        // Check box (using boxRows and boxCols for rectangular boxes)
+        const boxRow = Math.floor(row / boxRows) * boxRows;
+        const boxCol = Math.floor(col / boxCols) * boxCols;
+        for (let y = boxRow; y < boxRow + boxRows; y++) {
+            for (let x = boxCol; x < boxCol + boxCols; x++) {
                 if (grid[y][x] === num) return false;
             }
         }
@@ -86,7 +110,7 @@ function generateSolution(size = 9) {
  */
 function countSolutions(puzzle, size = 9) {
     const grid = puzzle.map(row => [...row]);
-    const boxSize = Math.sqrt(size);
+    const { boxRows, boxCols } = getBoxDimensions(size);
     let count = 0;
 
     function isValid(row, col, num) {
@@ -96,10 +120,11 @@ function countSolutions(puzzle, size = 9) {
         for (let y = 0; y < size; y++) {
             if (grid[y][col] === num) return false;
         }
-        const boxRow = Math.floor(row / boxSize) * boxSize;
-        const boxCol = Math.floor(col / boxSize) * boxSize;
-        for (let y = boxRow; y < boxRow + boxSize; y++) {
-            for (let x = boxCol; x < boxCol + boxSize; x++) {
+        // Check box using boxRows and boxCols for rectangular boxes
+        const boxRow = Math.floor(row / boxRows) * boxRows;
+        const boxCol = Math.floor(col / boxCols) * boxCols;
+        for (let y = boxRow; y < boxRow + boxRows; y++) {
+            for (let x = boxCol; x < boxCol + boxCols; x++) {
                 if (grid[y][x] === num) return false;
             }
         }
@@ -142,7 +167,14 @@ function createPuzzle(solution, difficulty) {
     const puzzle = solution.map(row => [...row]);
 
     // Use appropriate settings based on grid size
-    const settingsTable = size === 4 ? DIFFICULTY_SETTINGS_4x4 : DIFFICULTY_SETTINGS;
+    let settingsTable;
+    if (size === 4) {
+        settingsTable = DIFFICULTY_SETTINGS_4x4;
+    } else if (size === 6) {
+        settingsTable = DIFFICULTY_SETTINGS_6x6;
+    } else {
+        settingsTable = DIFFICULTY_SETTINGS;
+    }
     const settings = settingsTable[difficulty] || settingsTable.medium;
 
     // Get all cell positions and shuffle
@@ -197,13 +229,14 @@ function randomInt(min, max) {
  * Generate a new Sudoku puzzle
  * @param {Object} options
  * @param {string} [options.difficulty='medium'] - 'easy' | 'medium' | 'hard'
- * @param {number} [options.gridSize=9] - Grid size (must be perfect square)
+ * @param {number} [options.gridSize=9] - Grid size (4, 6, or 9)
  * @returns {{ puzzle: number[][], solution: number[][] }}
  */
 export function generateSudoku({ difficulty = 'medium', gridSize = 9 } = {}) {
-    const boxSize = Math.sqrt(gridSize);
-    if (!Number.isInteger(boxSize)) {
-        throw new Error('Grid size must be a perfect square (4, 9, 16, etc.)');
+    // Validate supported grid sizes
+    const supportedSizes = [4, 6, 9];
+    if (!supportedSizes.includes(gridSize)) {
+        throw new Error('Grid size must be 4, 6, or 9');
     }
 
     const solution = generateSolution(gridSize);
@@ -257,6 +290,37 @@ export const TEST_PUZZLES = {
     },
 
     /**
+     * 6x6 Mini Sudoku test puzzle - 8 empty cells
+     * Box layout: 3 columns x 2 rows per box
+     */
+    '6x6': {
+        puzzle: [
+            [0, 2, 3, 4, 5, 0],
+            [4, 5, 6, 1, 2, 3],
+            [2, 3, 0, 5, 6, 4],
+            [5, 6, 4, 0, 3, 1],
+            [3, 0, 2, 6, 4, 5],
+            [6, 4, 5, 3, 0, 2]
+        ],
+        solution: [
+            [1, 2, 3, 4, 5, 6],
+            [4, 5, 6, 1, 2, 3],
+            [2, 3, 1, 5, 6, 4],
+            [5, 6, 4, 2, 3, 1],
+            [3, 1, 2, 6, 4, 5],
+            [6, 4, 5, 3, 1, 2]
+        ],
+        emptyCells: [
+            { row: 0, col: 0, value: 1 },
+            { row: 0, col: 5, value: 6 },
+            { row: 2, col: 2, value: 1 },
+            { row: 3, col: 3, value: 2 },
+            { row: 4, col: 1, value: 1 },
+            { row: 5, col: 4, value: 1 }
+        ]
+    },
+
+    /**
      * 9x9 test puzzle - easy with 10 empty cells for quick testing
      */
     '9x9': {
@@ -296,7 +360,7 @@ export const TEST_PUZZLES = {
 
 /**
  * Get a test puzzle by grid size
- * @param {number} gridSize - 4 or 9
+ * @param {number} gridSize - 4, 6, or 9
  * @returns {{ puzzle: number[][], solution: number[][], emptyCells: Array<{row: number, col: number, value: number}> }}
  */
 export function getTestPuzzle(gridSize) {
@@ -306,3 +370,10 @@ export function getTestPuzzle(gridSize) {
     }
     return TEST_PUZZLES[key];
 }
+
+/**
+ * Get box dimensions for a given grid size (exported for board.js)
+ * @param {number} size - Grid size
+ * @returns {{ boxRows: number, boxCols: number }}
+ */
+export { getBoxDimensions };

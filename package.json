@@ -1,6 +1,6 @@
 {
     "name": "sudoku",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "A free, client-side Sudoku game that runs entirely in the browser — no server, no account, no install required.",
     "type": "module",
     "scripts": {
