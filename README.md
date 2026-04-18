@@ -1,6 +1,12 @@
 # 🧩 Sudoku
 
-A client-side Sudoku game that runs entirely in the browser — no server required.
+A free, client-side Sudoku game that runs entirely in the browser — no server, no account, no install required.
+
+**Play now:** [mcronberg.github.io/Soduku](https://mcronberg.github.io/Soduku)  
+**Source:** [github.com/mcronberg/Soduku](https://github.com/mcronberg/Soduku)
+
+> Created by [Michell Cronberg](https://github.com/mcronberg) with [Claude](https://claude.ai) (AI).  
+> This project serves three purposes: a free Sudoku game for everyone, a clonable repo for adding your own features, and a practical example of AI-assisted development.
 
 ## Features
 
@@ -15,16 +21,24 @@ A client-side Sudoku game that runs entirely in the browser — no server requir
 
 ## Play
 
-Hosted on GitHub Pages: **https://yourusername.github.io/repository-name**
+**Online:** [mcronberg.github.io/Soduku](https://mcronberg.github.io/Soduku)
 
-Or open `docs/index.html` directly in any modern browser.
+Or clone the repo and open `docs/index.html` directly in any modern browser — no build step needed.
+
+## Clone & Extend
+
+```
+git clone https://github.com/mcronberg/Soduku.git
+```
+
+All game logic lives in `docs/js/`. There are no dependencies, no bundler, and no framework — just HTML, CSS, and ES modules. Open the files, make changes, refresh the browser.
 
 ## GitHub Pages Setup
 
-1. Push this repository to GitHub
+1. Fork or push to GitHub
 2. Go to **Settings → Pages**
 3. Set Source to **Deploy from a branch** → `main` / `docs` folder
-4. Save — the site will be live at `https://yourusername.github.io/repository-name`
+4. Save — the site will be live at `https://yourusername.github.io/Soduku`
 
 ## Project Structure
 
@@ -50,3 +64,8 @@ Requires Node.js 22+. No dependencies needed.
 ```
 node --test tests/generator.test.js
 ```
+
+## About This Project
+
+This repo was built entirely through AI-assisted development using [Claude](https://claude.ai) inside VS Code with GitHub Copilot. It is intentionally simple — vanilla JS, vanilla CSS, zero dependencies — so the code is easy to read, understand, and extend. A good starting point if you want to learn how AI tools can help you build real software from scratch.
+
