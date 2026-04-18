@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a90d9"/>
+      <stop offset="100%" style="stop-color:#357abd"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="512" height="512" rx="64" fill="url(#bg)"/>
+  <!-- Grid lines -->
+  <g stroke="#fff" stroke-width="4" fill="none" opacity="0.3">
+    <!-- Outer border -->
+    <rect x="56" y="56" width="400" height="400" rx="8"/>
+    <!-- Vertical lines -->
+    <line x1="189" y1="56" x2="189" y2="456"/>
+    <line x1="323" y1="56" x2="323" y2="456"/>
+    <!-- Horizontal lines -->
+    <line x1="56" y1="189" x2="456" y2="189"/>
+    <line x1="56" y1="323" x2="456" y2="323"/>
+  </g>
+  <!-- Thick box borders -->
+  <g stroke="#fff" stroke-width="8" fill="none" opacity="0.6">
+    <rect x="56" y="56" width="400" height="400" rx="8"/>
+    <line x1="189" y1="56" x2="189" y2="456"/>
+    <line x1="323" y1="56" x2="323" y2="456"/>
+    <line x1="56" y1="189" x2="456" y2="189"/>
+    <line x1="56" y1="323" x2="456" y2="323"/>
+  </g>
+  <!-- Numbers -->
+  <g fill="#fff" font-family="Arial, sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="central">
+    <text x="122" y="122" font-size="64">5</text>
+    <text x="256" y="122" font-size="64">3</text>
+    <text x="390" y="122" font-size="64">7</text>
+    <text x="122" y="256" font-size="64">6</text>
+    <text x="256" y="256" font-size="64">9</text>
+    <text x="390" y="256" font-size="64">2</text>
+    <text x="122" y="390" font-size="64">1</text>
+    <text x="256" y="390" font-size="64">4</text>
+    <text x="390" y="390" font-size="64">8</text>
+  </g>
+</svg>

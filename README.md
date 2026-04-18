@@ -10,6 +10,7 @@ A free, client-side Sudoku game that runs entirely in the browser — no server,
 
 ## Features
 
+- **Progressive Web App (PWA)** - Install on any device, works offline
 - **Puzzle Generation in the Browser** - Unique puzzles generated locally using backtracking
 - **Guaranteed Unique Solution** - Every puzzle has exactly one correct answer
 - **Move Validation** - Incorrect numbers are rejected with a shake animation
@@ -46,6 +47,10 @@ All game logic lives in `docs/js/`. There are no dependencies, no bundler, and n
 ```
 docs/
   index.html
+  manifest.json    # PWA manifest
+  sw.js            # Service worker for offline caching
+  icons/
+    icon.svg       # App icon (SVG)
   css/
     themes.css   # CSS custom properties for light/dark themes
     style.css    # Layout and component styles
