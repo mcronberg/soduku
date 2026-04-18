@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { generateSudoku, validateMove } from '../docs/js/generator.js';
+import { generateSudoku, validateMove, getTestPuzzle, TEST_PUZZLES } from '../docs/js/generator.js';
 
 // ─── helpers ────────────────────────────────────────────────────────────────
 
@@ -116,4 +116,52 @@ test('validateMove — checks every cell in solution', () => {
         for (let c = 0; c < 9; c++)
             assert(validateMove(solution, r, c, solution[r][c]),
                 `validateMove failed at [${r}][${c}]`);
+});
+
+// ─── TEST_PUZZLES (static test data) ─────────────────────────────────────────
+
+test('4x4 test puzzle — solution is valid', () => {
+    const { solution } = getTestPuzzle(4);
+    assertValidGrid(solution, 4);
+});
+
+test('9x9 test puzzle — solution is valid', () => {
+    const { solution } = getTestPuzzle(9);
+    assertValidGrid(solution, 9);
+});
+
+test('4x4 test puzzle — emptyCells match solution', () => {
+    const { solution, emptyCells } = getTestPuzzle(4);
+    for (const { row, col, value } of emptyCells) {
+        assert.equal(solution[row][col], value,
+            `Empty cell [${row}][${col}] should be ${value}`);
+    }
+});
+
+test('9x9 test puzzle — emptyCells match solution', () => {
+    const { solution, emptyCells } = getTestPuzzle(9);
+    for (const { row, col, value } of emptyCells) {
+        assert.equal(solution[row][col], value,
+            `Empty cell [${row}][${col}] should be ${value}`);
+    }
+});
+
+test('4x4 test puzzle — puzzle has zeros at emptyCells positions', () => {
+    const { puzzle, emptyCells } = getTestPuzzle(4);
+    for (const { row, col } of emptyCells) {
+        assert.equal(puzzle[row][col], 0,
+            `Cell [${row}][${col}] should be empty (0)`);
+    }
+});
+
+test('9x9 test puzzle — puzzle has zeros at emptyCells positions', () => {
+    const { puzzle, emptyCells } = getTestPuzzle(9);
+    for (const { row, col } of emptyCells) {
+        assert.equal(puzzle[row][col], 0,
+            `Cell [${row}][${col}] should be empty (0)`);
+    }
+});
+
+test('getTestPuzzle — throws for invalid size', () => {
+    assert.throws(() => getTestPuzzle(6), /No test puzzle/);
 });

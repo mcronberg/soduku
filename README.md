@@ -49,21 +49,85 @@ docs/
     themes.css   # CSS custom properties for light/dark themes
     style.css    # Layout and component styles
   js/
-    generator.js # Sudoku puzzle generator and move validator
+    generator.js # Sudoku puzzle generator, validator, and test puzzles
     board.js     # Board renderer and keyboard/mouse interactions
     theme.js     # Dark/light theme toggle
     app.js       # Main application logic
 tests/
-  generator.test.js  # 13 unit tests for puzzle generation and validation
+  generator.test.js  # 20 unit tests for puzzle generation and validation
+  e2e/
+    theme.spec.js      # Theme toggle tests (light/dark mode)
+    responsive.spec.js # Responsive design tests
+    game.spec.js       # Game functionality tests
+    visual.spec.js     # Visual regression tests
 ```
 
 ## Running Tests
 
+### Unit Tests
+
 Requires Node.js 22+. No dependencies needed.
 
 ```
-node --test tests/generator.test.js
+npm test
 ```
+
+### E2E Tests (Playwright)
+
+Requires Node.js and npm. Install dependencies first:
+
+```
+npm install
+npx playwright install chromium
+```
+
+Run E2E tests:
+
+```
+npm run test:e2e           # Run tests headless
+npm run test:e2e:headed    # Run tests with browser visible
+npm run test:e2e:ui        # Open Playwright UI
+npm run test:e2e:all       # Run all browser projects
+```
+
+Run all tests:
+
+```
+npm run test:all           # Unit tests + E2E tests
+```
+
+### Visual Regression Tests
+
+Generate baseline screenshots:
+
+```
+npm run test:visual:update
+```
+
+Compare against baselines:
+
+```
+npm run test:visual
+```
+
+## Static Test Puzzles
+
+For UI testing and automated verification, `generator.js` exports static puzzles with known solutions:
+
+```javascript
+import { getTestPuzzle, TEST_PUZZLES } from './docs/js/generator.js';
+
+// Get 4x4 test puzzle
+const { puzzle, solution, emptyCells } = getTestPuzzle(4);
+
+// emptyCells contains all empty positions with their correct values:
+// [{ row: 0, col: 0, value: 1 }, { row: 1, col: 1, value: 4 }, ...]
+```
+
+Both 4×4 and 9×9 test puzzles are available. These never change, making them ideal for:
+- Playwright/Selenium UI tests
+- Visual regression testing
+- Manual QA verification
 
 ## About This Project
 

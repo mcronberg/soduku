@@ -223,3 +223,86 @@ export function generateSudoku({ difficulty = 'medium', gridSize = 9 } = {}) {
 export function validateMove(solution, row, col, value) {
     return solution[row][col] === value;
 }
+
+/**
+ * Static test puzzles with known solutions for UI testing.
+ * These puzzles never change, making them ideal for automated tests.
+ */
+export const TEST_PUZZLES = {
+    /**
+     * 4x4 test puzzle - 6 empty cells
+     * Empty cells at: (0,0), (1,1), (1,3), (2,0), (3,2), (3,3)
+     */
+    '4x4': {
+        puzzle: [
+            [0, 2, 3, 4],
+            [3, 0, 1, 0],
+            [0, 3, 4, 1],
+            [4, 1, 0, 0]
+        ],
+        solution: [
+            [1, 2, 3, 4],
+            [3, 4, 1, 2],
+            [2, 3, 4, 1],
+            [4, 1, 2, 3]
+        ],
+        emptyCells: [
+            { row: 0, col: 0, value: 1 },
+            { row: 1, col: 1, value: 4 },
+            { row: 1, col: 3, value: 2 },
+            { row: 2, col: 0, value: 2 },
+            { row: 3, col: 2, value: 2 },
+            { row: 3, col: 3, value: 3 }
+        ]
+    },
+
+    /**
+     * 9x9 test puzzle - easy with 10 empty cells for quick testing
+     */
+    '9x9': {
+        puzzle: [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ],
+        solution: [
+            [5, 3, 4, 6, 7, 8, 9, 1, 2],
+            [6, 7, 2, 1, 9, 5, 3, 4, 8],
+            [1, 9, 8, 3, 4, 2, 5, 6, 7],
+            [8, 5, 9, 7, 6, 1, 4, 2, 3],
+            [4, 2, 6, 8, 5, 3, 7, 9, 1],
+            [7, 1, 3, 9, 2, 4, 8, 5, 6],
+            [9, 6, 1, 5, 3, 7, 2, 8, 4],
+            [2, 8, 7, 4, 1, 9, 6, 3, 5],
+            [3, 4, 5, 2, 8, 6, 1, 7, 9]
+        ],
+        // First 6 empty cells for quick test
+        emptyCells: [
+            { row: 0, col: 2, value: 4 },
+            { row: 0, col: 3, value: 6 },
+            { row: 0, col: 5, value: 8 },
+            { row: 0, col: 6, value: 9 },
+            { row: 0, col: 7, value: 1 },
+            { row: 0, col: 8, value: 2 }
+        ]
+    }
+};
+
+/**
+ * Get a test puzzle by grid size
+ * @param {number} gridSize - 4 or 9
+ * @returns {{ puzzle: number[][], solution: number[][], emptyCells: Array<{row: number, col: number, value: number}> }}
+ */
+export function getTestPuzzle(gridSize) {
+    const key = `${gridSize}x${gridSize}`;
+    if (!TEST_PUZZLES[key]) {
+        throw new Error(`No test puzzle for grid size ${gridSize}`);
+    }
+    return TEST_PUZZLES[key];
+}
