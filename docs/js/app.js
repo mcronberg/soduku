@@ -604,48 +604,9 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('./sw.js')
             .then((registration) => {
                 console.log('SW registered:', registration.scope);
-
-                // Capture the waiting worker at show-time so the reference stays valid at click-time
-                const showUpdateToast = (worker) => {
-                    const container = document.getElementById('toastContainer');
-                    // Avoid duplicate toasts
-                    if (container.querySelector('.toast-update')) return;
-                    const toast = document.createElement('div');
-                    toast.className = 'toast toast-update';
-                    toast.innerHTML = '\uD83D\uDD04 Updates available &mdash; <button class="toast-update-btn">Update now</button>';
-                    container.appendChild(toast);
-                    toast.querySelector('.toast-update-btn').addEventListener('click', () => {
-                        worker.postMessage({ type: 'SKIP_WAITING' });
-                        toast.remove();
-                    });
-                };
-
-                // Already waiting when page loads
-                if (registration.waiting) {
-                    showUpdateToast(registration.waiting);
-                }
-
-                // New SW found after page load
-                registration.addEventListener('updatefound', () => {
-                    const newWorker = registration.installing;
-                    newWorker.addEventListener('statechange', () => {
-                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            showUpdateToast(newWorker);
-                        }
-                    });
-                });
             })
             .catch((error) => {
                 console.log('SW registration failed:', error);
             });
-
-        // Reload page when new SW takes control
-        let refreshing = false;
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            if (!refreshing) {
-                refreshing = true;
-                window.location.reload();
-            }
-        });
     });
 }
