@@ -98,6 +98,7 @@ npm run test:all      # All tests
 - After any code change that affects game logic, run all tests to verify nothing is broken
 - When adding new features, create corresponding unit tests in `tests/generator.test.js` and E2E tests in `tests/e2e/`
 - All tests must pass before considering a change complete
+- **Never push or declare a fix done without visually verifying the result yourself.** Do not rely solely on code reasoning — always inspect the actual rendered output (screenshot or browser) before releasing.
 
 ## Documentation
 
