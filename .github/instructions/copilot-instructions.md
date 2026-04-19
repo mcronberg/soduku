@@ -49,6 +49,11 @@ Use CSS media queries and flexible layouts:
 @media (min-width: 1025px) { /* desktop */ }
 ```
 
+## Language
+
+- **All user-facing text must be in English** — buttons, labels, toasts, modals, error messages, stats, everything
+- Never introduce Danish or other languages in UI text
+
 ## Code Style
 
 - Use `const` and `let`, never `var`
