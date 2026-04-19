@@ -477,6 +477,7 @@ function handleCellInput(row, col, value) {
                 timeSeconds: elapsed,
                 errorCount
             });
+            currentGameInfo = null; // Prevent leaveGame from logging a duplicate abandoned entry
         }
         setTimeout(() => showModal(completionModal), 300);
     }
