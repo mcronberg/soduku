@@ -33,6 +33,7 @@ const statsModal = document.getElementById('statsModal');
 const aboutModal = document.getElementById('aboutModal');
 const helpModal = document.getElementById('helpModal');
 const completionModal = document.getElementById('completionModal');
+const settingsModal = document.getElementById('settingsModal');
 
 // State
 let board = null;
@@ -43,6 +44,22 @@ let filledCount = 0;
 let timerStart = null;
 let timerInterval = null;
 let currentGameInfo = null;
+
+// ============================================================
+// Settings — stored in localStorage
+// ============================================================
+const SETTINGS_KEY = 'sudoku_settings';
+
+function getSettings() {
+    try { return { showTimer: false, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') }; }
+    catch { return { showTimer: false }; }
+}
+
+function saveSetting(key, value) {
+    const s = getSettings();
+    s[key] = value;
+    localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+}
 
 // ============================================================
 // Game Log — stored in localStorage
@@ -136,10 +153,13 @@ function renderStats() {
     }
 
     const diffLabel = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
-    const bestTimesRows = ['easy', 'medium', 'hard']
-        .filter(d => stats.bestTimes[d] !== null)
-        .map(d => `<tr><td>${diffLabel[d]}</td><td>${fmtTime(stats.bestTimes[d])}</td></tr>`)
-        .join('');
+    const { showTimer } = getSettings();
+    const bestTimesRows = showTimer
+        ? ['easy', 'medium', 'hard']
+            .filter(d => stats.bestTimes[d] !== null)
+            .map(d => `<tr><td>${diffLabel[d]}</td><td>${fmtTime(stats.bestTimes[d])}</td></tr>`)
+            .join('')
+        : '';
 
     // Last 10 games, newest first
     const recent = [...log].reverse().slice(0, 10);
@@ -147,7 +167,8 @@ function renderStats() {
         const date = new Date(g.date);
         const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
         const status = g.completed ? '✅' : '❌';
-        return `<tr><td>${dateStr}</td><td>${g.gridSize}×${g.gridSize}</td><td>${diffLabel[g.difficulty] || g.difficulty}</td><td>${fmtTime(g.timeSeconds)}</td><td>${status}</td></tr>`;
+        const timeCell = showTimer ? fmtTime(g.timeSeconds) : '–';
+        return `<tr><td>${dateStr}</td><td>${g.gridSize}×${g.gridSize}</td><td>${diffLabel[g.difficulty] || g.difficulty}</td><td>${timeCell}</td><td>${status}</td></tr>`;
     }).join('');
 
     container.innerHTML = `
@@ -155,7 +176,7 @@ function renderStats() {
             <div class="stat-card"><div class="stat-value">${stats.totalGames}</div><div class="stat-label">Games played</div></div>
             <div class="stat-card"><div class="stat-value">${stats.completedGames}</div><div class="stat-label">Completed</div></div>
             <div class="stat-card"><div class="stat-value">${stats.completionRate}%</div><div class="stat-label">Completion rate</div></div>
-            <div class="stat-card"><div class="stat-value">${fmtTime(stats.avgTime)}</div><div class="stat-label">Avg. time</div></div>
+            <div class="stat-card"><div class="stat-value">${showTimer ? fmtTime(stats.avgTime) : '–'}</div><div class="stat-label">Avg. time</div></div>
         </div>
         ${bestTimesRows ? `
         <div class="help-section">
@@ -189,6 +210,9 @@ function startTimer() {
     timerStart = Date.now();
     clearInterval(timerInterval);
     const display = document.getElementById('liveTimer');
+    const timerEl = document.querySelector('.game-timer');
+    const { showTimer } = getSettings();
+    if (timerEl) timerEl.classList.toggle('hidden', !showTimer);
     display.textContent = '0:00';
     timerInterval = setInterval(() => {
         const elapsed = Math.floor((Date.now() - timerStart) / 1000);
@@ -202,10 +226,14 @@ function stopTimer() {
     clearInterval(timerInterval);
     timerInterval = null;
     const elapsed = timerStart ? Math.floor((Date.now() - timerStart) / 1000) : 0;
-    const m = Math.floor(elapsed / 60);
-    const s = elapsed % 60;
-    document.getElementById('completionTime').textContent =
-        `${m}:${String(s).padStart(2, '0')}`;
+    const { showTimer } = getSettings();
+    const timeWrapper = document.querySelector('.completion-time');
+    if (timeWrapper) timeWrapper.classList.toggle('hidden', !showTimer);
+    if (showTimer) {
+        const m = Math.floor(elapsed / 60);
+        const s = elapsed % 60;
+        document.getElementById('completionTime').textContent = `${m}:${String(s).padStart(2, '0')}`;
+    }
 }
 
 function init() {
@@ -357,6 +385,38 @@ function setupEventListeners() {
     helpBtn.addEventListener('click', () => showModal(helpModal));
     closeHelpBtn.addEventListener('click', () => hideModal(helpModal));
 
+    // Settings modal
+    const settingsBtnEl = document.getElementById('settingsBtn');
+    const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+    const showTimerToggle = document.getElementById('showTimerToggle');
+    settingsBtnEl.addEventListener('click', () => {
+        showTimerToggle.checked = getSettings().showTimer;
+        showModal(settingsModal);
+    });
+    closeSettingsBtn.addEventListener('click', () => hideModal(settingsModal));
+    showTimerToggle.addEventListener('change', () => saveSetting('showTimer', showTimerToggle.checked));
+    settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) hideModal(settingsModal); });
+
+    // Menu dropdown
+    const menuBtn = document.getElementById('menuBtn');
+    const menuDropdown = document.getElementById('menuDropdown');
+    menuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = !menuDropdown.classList.contains('hidden');
+        menuDropdown.classList.toggle('hidden', isOpen);
+        menuBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
+    document.addEventListener('click', () => {
+        menuDropdown.classList.add('hidden');
+        menuBtn.setAttribute('aria-expanded', 'false');
+    });
+    menuDropdown.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', () => {
+            menuDropdown.classList.add('hidden');
+            menuBtn.setAttribute('aria-expanded', 'false');
+        });
+    });
+
     newGameAfterWin.addEventListener('click', () => {
         hideModal(completionModal);
         leaveGame();
@@ -375,6 +435,7 @@ function setupEventListeners() {
             hideModal(aboutModal);
             hideModal(helpModal);
             hideModal(completionModal);
+            hideModal(settingsModal);
         }
     });
 }

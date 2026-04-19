@@ -684,6 +684,122 @@ h3 { font-size: 1rem; }
   opacity: 0.9;
 }
 
+/* ============================================================
+   Menu Dropdown
+   ============================================================ */
+.menu-wrapper {
+  position: relative;
+}
+
+.menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.5rem);
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-lg);
+  min-width: 180px;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  color: var(--color-text);
+  text-align: left;
+  font-size: 0.95rem;
+  text-decoration: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-item:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
+/* ============================================================
+   Settings Modal
+   ============================================================ */
+.settings-section {
+  padding: 0.5rem 0;
+}
+
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 0.95rem;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 1.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-border);
+  border-radius: 1.5rem;
+  transition: background-color 0.2s;
+}
+
+.toggle-track::before {
+  content: '';
+  position: absolute;
+  width: 1.1rem;
+  height: 1.1rem;
+  left: 0.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #fff;
+  border-radius: 50%;
+  transition: left 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-track {
+  background-color: var(--color-primary);
+}
+
+.toggle-switch input:checked + .toggle-track::before {
+  left: calc(100% - 1.3rem);
+}
+
 @keyframes slideUp {
   from {
     transform: translateY(100%);
