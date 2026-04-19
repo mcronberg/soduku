@@ -548,25 +548,24 @@ if ('serviceWorker' in navigator) {
             .then((registration) => {
                 console.log('SW registered:', registration.scope);
 
-                const showUpdateToast = () => {
+                // Capture the waiting worker at show-time so the reference stays valid at click-time
+                const showUpdateToast = (worker) => {
                     const container = document.getElementById('toastContainer');
                     // Avoid duplicate toasts
                     if (container.querySelector('.toast-update')) return;
                     const toast = document.createElement('div');
                     toast.className = 'toast toast-update';
-                    toast.innerHTML = '\uD83D\uDD04 Ny version tilg\u00E6ngelig &mdash; <button class="toast-update-btn">Opdater nu</button>';
+                    toast.innerHTML = '\uD83D\uDD04 New version available &mdash; <button class="toast-update-btn">Update now</button>';
                     container.appendChild(toast);
                     toast.querySelector('.toast-update-btn').addEventListener('click', () => {
-                        if (registration.waiting) {
-                            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-                        }
+                        worker.postMessage({ type: 'SKIP_WAITING' });
                         toast.remove();
                     });
                 };
 
                 // Already waiting when page loads
                 if (registration.waiting) {
-                    showUpdateToast();
+                    showUpdateToast(registration.waiting);
                 }
 
                 // New SW found after page load
@@ -574,7 +573,7 @@ if ('serviceWorker' in navigator) {
                     const newWorker = registration.installing;
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            showUpdateToast();
+                            showUpdateToast(newWorker);
                         }
                     });
                 });

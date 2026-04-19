@@ -3,7 +3,7 @@
  * Provides offline caching for the PWA
  */
 
-const CACHE_VERSION = '1.0.9';
+const CACHE_VERSION = '1.1.0';
 const CACHE_NAME = `sudoku-v${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -52,7 +52,7 @@ self.addEventListener('activate', (event) => {
     );
 });
 
-// Fetch event - cache-first strategy for static assets
+// Fetch event — network-first for HTML, cache-first for everything else
 self.addEventListener('fetch', (event) => {
     // Only handle GET requests
     if (event.request.method !== 'GET') {
@@ -64,40 +64,44 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // Network-first for HTML navigation — ensures fresh version number / content
+    if (event.request.mode === 'navigate') {
+        event.respondWith(
+            fetch(event.request)
+                .then((networkResponse) => {
+                    if (networkResponse && networkResponse.status === 200) {
+                        const clone = networkResponse.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+                    }
+                    return networkResponse;
+                })
+                .catch(() => caches.match('./index.html'))
+        );
+        return;
+    }
+
+    // Cache-first for all other static assets (CSS, JS, icons, etc.)
     event.respondWith(
         caches.match(event.request)
             .then((cachedResponse) => {
                 if (cachedResponse) {
-                    // Return cached version
                     return cachedResponse;
                 }
 
-                // Not in cache - fetch from network
                 return fetch(event.request)
                     .then((networkResponse) => {
-                        // Don't cache non-successful responses
                         if (!networkResponse || networkResponse.status !== 200) {
                             return networkResponse;
                         }
 
-                        // Clone the response before caching
                         const responseToCache = networkResponse.clone();
-
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(event.request, responseToCache);
-                            });
+                        caches.open(CACHE_NAME).then((cache) => {
+                            cache.put(event.request, responseToCache);
+                        });
 
                         return networkResponse;
                     })
-                    .catch(() => {
-                        // Network failed and not in cache
-                        // Return offline fallback for navigation requests
-                        if (event.request.mode === 'navigate') {
-                            return caches.match('./index.html');
-                        }
-                        return new Response('Offline', { status: 503 });
-                    });
+                    .catch(() => new Response('Offline', { status: 503 }));
             })
     );
 });
