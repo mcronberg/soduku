@@ -2,7 +2,7 @@
  * Sudoku - Single Player Client-Side App
  */
 
-import { initTheme } from './theme.js';
+import { initTheme, toggleTheme } from './theme.js';
 import { generateSudoku } from './generator.js';
 import { createBoardRenderer } from './board.js';
 
@@ -21,6 +21,7 @@ const aboutBtn = document.getElementById('aboutBtn');
 const closeAboutBtn = document.getElementById('closeAboutBtn');
 const helpBtn = document.getElementById('helpBtn');
 const closeHelpBtn = document.getElementById('closeHelpBtn');
+const settingsBtn = document.getElementById('settingsBtn');
 const newGameAfterWin = document.getElementById('newGameAfterWin');
 const closeCompletionBtn = document.getElementById('closeCompletionBtn');
 
@@ -386,10 +387,9 @@ function setupEventListeners() {
     closeHelpBtn.addEventListener('click', () => hideModal(helpModal));
 
     // Settings modal
-    const settingsBtnEl = document.getElementById('settingsBtn');
     const closeSettingsBtn = document.getElementById('closeSettingsBtn');
     const showTimerToggle = document.getElementById('showTimerToggle');
-    settingsBtnEl.addEventListener('click', () => {
+    settingsBtn.addEventListener('click', () => {
         showTimerToggle.checked = getSettings().showTimer;
         showModal(settingsModal);
     });
@@ -397,7 +397,7 @@ function setupEventListeners() {
     showTimerToggle.addEventListener('change', () => saveSetting('showTimer', showTimerToggle.checked));
     settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) hideModal(settingsModal); });
 
-    // Menu dropdown
+    // Mobile dropdown
     const menuBtn = document.getElementById('menuBtn');
     const menuDropdown = document.getElementById('menuDropdown');
     menuBtn.addEventListener('click', (e) => {
@@ -410,10 +410,20 @@ function setupEventListeners() {
         menuDropdown.classList.add('hidden');
         menuBtn.setAttribute('aria-expanded', 'false');
     });
-    menuDropdown.querySelectorAll('.menu-item').forEach(item => {
+    menuDropdown.querySelectorAll('[data-action]').forEach(item => {
         item.addEventListener('click', () => {
             menuDropdown.classList.add('hidden');
             menuBtn.setAttribute('aria-expanded', 'false');
+            switch (item.dataset.action) {
+                case 'stats': renderStats(); showModal(statsModal); break;
+                case 'settings':
+                    showTimerToggle.checked = getSettings().showTimer;
+                    showModal(settingsModal);
+                    break;
+                case 'about': showModal(aboutModal); break;
+                case 'help': showModal(helpModal); break;
+                case 'theme': toggleTheme(); break;
+            }
         });
     });
 

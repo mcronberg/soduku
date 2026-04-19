@@ -44,6 +44,10 @@ function updateThemeButton(theme) {
         btn.textContent = theme === 'dark' ? '☀️' : '🌙';
         btn.title = theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode';
     }
+    const mobileBtn = document.getElementById('mobileThemeBtn');
+    if (mobileBtn) {
+        mobileBtn.textContent = theme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode';
+    }
 }
 
 /**
