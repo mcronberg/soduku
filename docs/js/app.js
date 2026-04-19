@@ -136,11 +136,11 @@ function renderStats() {
     const stats = getGameStats();
 
     if (log.length === 0) {
-        container.innerHTML = '<p class="stats-empty">Ingen spil registreret endnu.<br>Spil et par runder og kom tilbage!</p>';
+        container.innerHTML = '<p class="stats-empty">No games recorded yet.<br>Play a few rounds and come back!</p>';
         return;
     }
 
-    const diffLabel = { easy: 'Let', medium: 'Mellem', hard: 'Svær' };
+    const diffLabel = { easy: 'Easy', medium: 'Medium', hard: 'Hard' };
     const bestTimesRows = ['easy', 'medium', 'hard']
         .filter(d => stats.bestTimes[d] !== null)
         .map(d => `<tr><td>${diffLabel[d]}</td><td>${fmtTime(stats.bestTimes[d])}</td></tr>`)
@@ -157,33 +157,33 @@ function renderStats() {
 
     container.innerHTML = `
         <div class="stats-grid">
-            <div class="stat-card"><div class="stat-value">${stats.totalGames}</div><div class="stat-label">Spil i alt</div></div>
-            <div class="stat-card"><div class="stat-value">${stats.completedGames}</div><div class="stat-label">Løst</div></div>
-            <div class="stat-card"><div class="stat-value">${stats.completionRate}%</div><div class="stat-label">Løsningsrate</div></div>
-            <div class="stat-card"><div class="stat-value">${stats.avgErrors}</div><div class="stat-label">Fejl i snit</div></div>
+            <div class="stat-card"><div class="stat-value">${stats.totalGames}</div><div class="stat-label">Games played</div></div>
+            <div class="stat-card"><div class="stat-value">${stats.completedGames}</div><div class="stat-label">Completed</div></div>
+            <div class="stat-card"><div class="stat-value">${stats.completionRate}%</div><div class="stat-label">Completion rate</div></div>
+            <div class="stat-card"><div class="stat-value">${stats.avgErrors}</div><div class="stat-label">Avg. errors</div></div>
         </div>
         ${bestTimesRows ? `
         <div class="help-section">
-            <h3>🏆 Bedste tider (fuldført)</h3>
+            <h3>🏆 Best times (completed)</h3>
             <table class="stats-table">
-                <thead><tr><th>Sværhed</th><th>Tid</th></tr></thead>
+                <thead><tr><th>Difficulty</th><th>Time</th></tr></thead>
                 <tbody>${bestTimesRows}</tbody>
             </table>
         </div>` : ''}
         <div class="help-section">
-            <h3>📋 Seneste ${recent.length} spil</h3>
+            <h3>📋 Last ${recent.length} games</h3>
             <table class="stats-table">
-                <thead><tr><th>Dato</th><th>Grid</th><th>Sværhed</th><th>Tid</th><th>Fejl</th><th></th></tr></thead>
+                <thead><tr><th>Date</th><th>Grid</th><th>Difficulty</th><th>Time</th><th>Errors</th><th></th></tr></thead>
                 <tbody>${recentRows}</tbody>
             </table>
         </div>
         <div style="text-align:center">
-            <button class="stats-clear-btn" id="clearStatsBtn">Ryd historik</button>
+            <button class="stats-clear-btn" id="clearStatsBtn">Clear history</button>
         </div>
     `;
 
     document.getElementById('clearStatsBtn').addEventListener('click', () => {
-        if (confirm('Slet al spilhistorik?')) {
+        if (confirm('Delete all game history?')) {
             localStorage.removeItem(GAME_LOG_KEY);
             renderStats();
         }

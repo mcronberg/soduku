@@ -2,8 +2,8 @@
 
 A free, client-side Sudoku game that runs entirely in the browser — no server, no account, no install required.
 
-**Play now:** [mcronberg.github.io/Soduku](https://mcronberg.github.io/Soduku)  
-**Source:** [github.com/mcronberg/Soduku](https://github.com/mcronberg/Soduku)
+**Play now:** [mcronberg.github.io/soduku](https://mcronberg.github.io/soduku)  
+**Source:** [github.com/mcronberg/soduku](https://github.com/mcronberg/soduku)
 
 > Created by [Michell Cronberg](https://github.com/mcronberg) with [Claude](https://claude.ai) (AI).  
 > This project serves three purposes: a free Sudoku game for everyone, a clonable repo for adding your own features, and a practical example of AI-assisted development.
@@ -23,14 +23,14 @@ A free, client-side Sudoku game that runs entirely in the browser — no server,
 
 ## Play
 
-**Online:** [mcronberg.github.io/Soduku](https://mcronberg.github.io/Soduku)
+**Online:** [mcronberg.github.io/soduku](https://mcronberg.github.io/soduku)
 
 Or clone the repo and open `docs/index.html` directly in any modern browser — no build step needed.
 
 ## Clone & Extend
 
 ```
-git clone https://github.com/mcronberg/Soduku.git
+git clone https://github.com/mcronberg/soduku.git
 ```
 
 All game logic lives in `docs/js/`. There are no dependencies, no bundler, and no framework — just HTML, CSS, and ES modules. Open the files, make changes, refresh the browser.
