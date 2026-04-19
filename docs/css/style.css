@@ -3,6 +3,9 @@
  * Mobile-first responsive design
  */
 
+/* Utility */
+.hidden { display: none !important; }
+
 /* Reset & Base */
 *, *::before, *::after {
   box-sizing: border-box;
