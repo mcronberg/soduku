@@ -3,7 +3,7 @@
  */
 
 import { initTheme } from './theme.js';
-import { generateSudoku, validateMove } from './generator.js';
+import { generateSudoku } from './generator.js';
 import { createBoardRenderer } from './board.js';
 
 // DOM Elements
@@ -39,10 +39,9 @@ let board = null;
 let solution = null;
 let cells = null;
 let emptyCellCount = 0;
-let solvedCount = 0;
+let filledCount = 0;
 let timerStart = null;
 let timerInterval = null;
-let errorCount = 0;
 let currentGameInfo = null;
 
 // ============================================================
@@ -68,8 +67,7 @@ function saveGameToLog(entry) {
             gridSize: entry.gridSize,
             difficulty: entry.difficulty,
             completed: entry.completed,
-            timeSeconds: entry.timeSeconds,
-            errorCount: entry.errorCount
+            timeSeconds: entry.timeSeconds
         };
         log.push(logEntry);
         // Keep max 100 entries to avoid localStorage bloat
@@ -85,10 +83,9 @@ function saveGameToLog(entry) {
 function getGameStats() {
     const log = getGameLog();
     if (log.length === 0) {
-        return { totalGames: 0, completedGames: 0, completionRate: 0, totalErrors: 0, avgErrors: 0, avgTime: 0, byDifficulty: {}, bySize: {}, bestTimes: {} };
+        return { totalGames: 0, completedGames: 0, completionRate: 0, avgTime: 0, byDifficulty: {}, bySize: {}, bestTimes: {} };
     }
     const completed = log.filter(g => g.completed);
-    const totalErrors = log.reduce((sum, g) => sum + (g.errorCount || 0), 0);
     const avgTime = completed.length > 0
         ? Math.round(completed.reduce((sum, g) => sum + g.timeSeconds, 0) / completed.length)
         : 0;
@@ -100,8 +97,6 @@ function getGameStats() {
         totalGames: log.length,
         completedGames: completed.length,
         completionRate: Math.round((completed.length / log.length) * 100),
-        totalErrors,
-        avgErrors: Math.round((totalErrors / log.length) * 10) / 10,
         avgTime,
         byDifficulty: {
             easy: completed.filter(g => g.difficulty === 'easy').length,
@@ -152,7 +147,7 @@ function renderStats() {
         const date = new Date(g.date);
         const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
         const status = g.completed ? '✅' : '❌';
-        return `<tr><td>${dateStr}</td><td>${g.gridSize}×${g.gridSize}</td><td>${diffLabel[g.difficulty] || g.difficulty}</td><td>${fmtTime(g.timeSeconds)}</td><td>${g.errorCount}</td><td>${status}</td></tr>`;
+        return `<tr><td>${dateStr}</td><td>${g.gridSize}×${g.gridSize}</td><td>${diffLabel[g.difficulty] || g.difficulty}</td><td>${fmtTime(g.timeSeconds)}</td><td>${status}</td></tr>`;
     }).join('');
 
     container.innerHTML = `
@@ -160,7 +155,7 @@ function renderStats() {
             <div class="stat-card"><div class="stat-value">${stats.totalGames}</div><div class="stat-label">Games played</div></div>
             <div class="stat-card"><div class="stat-value">${stats.completedGames}</div><div class="stat-label">Completed</div></div>
             <div class="stat-card"><div class="stat-value">${stats.completionRate}%</div><div class="stat-label">Completion rate</div></div>
-            <div class="stat-card"><div class="stat-value">${stats.avgErrors}</div><div class="stat-label">Avg. errors</div></div>
+            <div class="stat-card"><div class="stat-value">${fmtTime(stats.avgTime)}</div><div class="stat-label">Avg. time</div></div>
         </div>
         ${bestTimesRows ? `
         <div class="help-section">
@@ -173,7 +168,7 @@ function renderStats() {
         <div class="help-section">
             <h3>📋 Last ${recent.length} games</h3>
             <table class="stats-table">
-                <thead><tr><th>Date</th><th>Grid</th><th>Difficulty</th><th>Time</th><th>Errors</th><th></th></tr></thead>
+                <thead><tr><th>Date</th><th>Grid</th><th>Difficulty</th><th>Time</th><th></th></tr></thead>
                 <tbody>${recentRows}</tbody>
             </table>
         </div>
@@ -397,8 +392,7 @@ function createGame(difficulty, gridSize) {
             const { puzzle, solution: sol } = generateSudoku({ difficulty, gridSize });
             solution = sol;
             emptyCellCount = 0;
-            solvedCount = 0;
-            errorCount = 0;
+            filledCount = 0;
             currentGameInfo = { gridSize, difficulty };
 
             // Build 2D cells array
@@ -447,26 +441,29 @@ function handleCellInput(row, col, value) {
     if (value === null) {
         // Clear the cell
         if (prevValue !== null) {
-            solvedCount--;
+            filledCount--;
             cells[row][col].value = null;
             board.updateCell(row, col, null);
         }
         return;
     }
 
-    if (!validateMove(solution, row, col, value)) {
-        board.shakeCell(row, col);
-        showToast('Incorrect number!', 'error');
-        errorCount++;
-        return;
-    }
-
-    // Correct move — only count as new solve if cell was empty
-    if (prevValue === null) solvedCount++;
+    // Accept any placement silently
+    if (prevValue === null) filledCount++;
     cells[row][col].value = value;
     board.updateCell(row, col, value);
 
-    if (solvedCount >= emptyCellCount) {
+    // Only check when all empty cells have been filled
+    if (filledCount >= emptyCellCount) {
+        const allCorrect = cells.every((rowArr, r) =>
+            rowArr.every((cell, c) => cell.isOriginal || cell.value === solution[r][c])
+        );
+
+        if (!allCorrect) {
+            showToast('Some numbers are incorrect — keep trying!', 'error');
+            return;
+        }
+
         const elapsed = timerStart ? Math.floor((Date.now() - timerStart) / 1000) : 0;
         stopTimer();
         if (currentGameInfo) {
@@ -474,10 +471,9 @@ function handleCellInput(row, col, value) {
                 gridSize: currentGameInfo.gridSize,
                 difficulty: currentGameInfo.difficulty,
                 completed: true,
-                timeSeconds: elapsed,
-                errorCount
+                timeSeconds: elapsed
             });
-            currentGameInfo = null; // Prevent leaveGame from logging a duplicate abandoned entry
+            currentGameInfo = null;
         }
         setTimeout(() => showModal(completionModal), 300);
     }
@@ -485,13 +481,12 @@ function handleCellInput(row, col, value) {
 
 function leaveGame() {
     // Save abandoned game to log if any moves were made
-    if (currentGameInfo && (solvedCount > 0 || errorCount > 0)) {
+    if (currentGameInfo && filledCount > 0) {
         saveGameToLog({
             gridSize: currentGameInfo.gridSize,
             difficulty: currentGameInfo.difficulty,
             completed: false,
-            timeSeconds: timerStart ? Math.floor((Date.now() - timerStart) / 1000) : 0,
-            errorCount
+            timeSeconds: timerStart ? Math.floor((Date.now() - timerStart) / 1000) : 0
         });
     }
     clearInterval(timerInterval);
