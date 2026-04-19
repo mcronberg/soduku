@@ -430,32 +430,12 @@ function createGame(difficulty, gridSize) {
 }
 
 /**
- * Mark incorrect user cells visually and clear them on next edit
- */
-function markWrongCells() {
-    if (!cells || !solution) return;
-    cells.forEach((rowArr, r) => {
-        rowArr.forEach((cell, c) => {
-            if (!cell.isOriginal && cell.value !== null && cell.value !== solution[r][c]) {
-                const el = sudokuBoard.querySelector(`[data-row="${r}"][data-col="${c}"]`);
-                el?.classList.add('cell-wrong');
-            }
-        });
-    });
-}
-
-function clearWrongCells() {
-    sudokuBoard.querySelectorAll('.cell-wrong').forEach(el => el.classList.remove('cell-wrong'));
-}
-
 /**
  * Handle a number input on a cell
  */
 function handleCellInput(row, col, value) {
     if (!cells || !solution) return;
     if (cells[row]?.[col]?.isOriginal) return;
-
-    clearWrongCells();
 
     const prevValue = cells[row][col].value;
 
@@ -481,8 +461,7 @@ function handleCellInput(row, col, value) {
         );
 
         if (!allCorrect) {
-            markWrongCells();
-            showToast('Some numbers are incorrect — keep trying!', 'error');
+            showToast('The puzzle is not solved correctly — keep trying!', 'error');
             return;
         }
 
