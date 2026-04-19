@@ -150,7 +150,7 @@ function renderStats() {
     const recent = [...log].reverse().slice(0, 10);
     const recentRows = recent.map(g => {
         const date = new Date(g.date);
-        const dateStr = `${date.getDate().toString().padStart(2,'0')}/${(date.getMonth()+1).toString().padStart(2,'0')} ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+        const dateStr = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
         const status = g.completed ? '✅' : '❌';
         return `<tr><td>${dateStr}</td><td>${g.gridSize}×${g.gridSize}</td><td>${diffLabel[g.difficulty] || g.difficulty}</td><td>${fmtTime(g.timeSeconds)}</td><td>${g.errorCount}</td><td>${status}</td></tr>`;
     }).join('');
