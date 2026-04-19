@@ -46,7 +46,11 @@ function updateThemeButton(theme) {
     }
     const mobileBtn = document.getElementById('mobileThemeBtn');
     if (mobileBtn) {
-        mobileBtn.textContent = theme === 'dark' ? '☀️ Light mode' : '🌙 Dark mode';
+        const icon = mobileBtn.querySelector('.menu-icon');
+        if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        // Update the text node (second child after the span)
+        const textNode = [...mobileBtn.childNodes].find(n => n.nodeType === Node.TEXT_NODE);
+        if (textNode) textNode.textContent = theme === 'dark' ? ' Light mode' : ' Dark mode';
     }
 }
 
