@@ -3,7 +3,7 @@
  * Provides offline caching for the PWA
  */
 
-const CACHE_VERSION = '1.0.4';
+const CACHE_VERSION = '1.0.8';
 const CACHE_NAME = `sudoku-v${CACHE_VERSION}`;
 
 // Files to cache for offline use
@@ -27,10 +27,6 @@ self.addEventListener('install', (event) => {
             .then((cache) => {
                 console.log('[SW] Caching static assets');
                 return cache.addAll(STATIC_ASSETS);
-            })
-            .then(() => {
-                // Activate immediately without waiting
-                return self.skipWaiting();
             })
     );
 });

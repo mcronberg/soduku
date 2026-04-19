@@ -112,6 +112,14 @@ h3 { font-size: 1rem; }
   font-size: 1.25rem;
 }
 
+.version-badge {
+  font-size: 0.6em;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
 .header-actions {
   display: flex;
   gap: 0.5rem;
@@ -548,6 +556,78 @@ h3 { font-size: 1rem; }
   justify-content: center;
 }
 
+/* Stats Modal */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.stat-card {
+  background-color: var(--color-bg-tertiary);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  line-height: 1.1;
+}
+
+.stat-card .stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.2rem;
+}
+
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.stats-table th {
+  text-align: left;
+  padding: 0.4rem 0.5rem;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stats-table td {
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.stats-table tr:last-child td {
+  border-bottom: none;
+}
+
+.stats-empty {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 2rem 0;
+}
+
+.stats-clear-btn {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+}
+
+.stats-clear-btn:hover {
+  background-color: var(--color-bg-tertiary);
+}
+
 /* Toast Notifications */
 .toast-container {
   position: fixed;
@@ -577,6 +657,26 @@ h3 { font-size: 1rem; }
 .toast.toast-error {
   border-color: var(--color-error);
   background-color: color-mix(in srgb, var(--color-error) 10%, var(--color-bg-secondary));
+}
+
+.toast.toast-update {
+  border-color: var(--color-primary);
+  background-color: color-mix(in srgb, var(--color-primary) 10%, var(--color-bg-secondary));
+}
+
+.toast-update-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-left: 0.4rem;
+}
+
+.toast-update-btn:hover {
+  opacity: 0.9;
 }
 
 @keyframes slideIn {

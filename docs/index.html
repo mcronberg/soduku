@@ -50,8 +50,8 @@
     <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
     <link rel="apple-touch-icon" href="icons/icon.svg">
 
-    <link rel="stylesheet" href="css/themes.css?v=1.0.4">
-    <link rel="stylesheet" href="css/style.css?v=1.0.4">
+    <link rel="stylesheet" href="css/themes.css?v=1.0.8">
+    <link rel="stylesheet" href="css/style.css?v=1.0.8">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -80,8 +80,13 @@
     <div id="app">
         <!-- Header -->
         <header class="header" role="banner">
-            <h1 class="logo">🧩 Sudoku</h1>
+            <h1 class="logo">🧩 Sudoku <small class="version-badge">v1.0.8</small></h1>
             <nav class="header-actions" aria-label="Site controls">
+                <a href="https://github.com/mcronberg/Soduku" target="_blank" rel="noopener" class="btn btn-icon" title="View on GitHub" aria-label="View source on GitHub">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                </a>
+                <button id="statsBtn" class="btn btn-icon" title="Statistics" aria-label="View statistics">📊</button>
+                <button id="aboutBtn" class="btn btn-icon" title="About" aria-label="About this game">ℹ</button>
                 <button id="helpBtn" class="btn btn-icon" title="How to Play" aria-label="How to Play">?</button>
                 <button id="themeBtn" class="btn btn-icon" title="Toggle Theme"
                     aria-label="Toggle dark/light theme">🌙</button>
@@ -161,6 +166,53 @@
             </div>
         </main>
 
+        <!-- Stats Modal -->
+        <div id="statsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="statsModalTitle">
+            <div class="modal-content">
+                <button class="modal-close" id="closeStatsBtn" aria-label="Close statistics">&times;</button>
+                <h2 id="statsModalTitle">📊 Your Statistics</h2>
+                <div id="statsContent"><!-- filled by JS --></div>
+            </div>
+        </div>
+
+        <!-- About Modal -->
+        <div id="aboutModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle">
+            <div class="modal-content">
+                <button class="modal-close" id="closeAboutBtn" aria-label="Close about">&times;</button>
+                <h2 id="aboutModalTitle">About Sudoku</h2>
+
+                <div class="help-section">
+                    <h3>🧩 What is this?</h3>
+                    <p>A free, client-side Sudoku game that runs entirely in the browser — no server, no account, no install required.</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>🎯 Why was it built?</h3>
+                    <p>This project serves three purposes:</p>
+                    <ul>
+                        <li>A <strong>free Sudoku game</strong> for everyone</li>
+                        <li>A <strong>clonable repo</strong> for adding your own features</li>
+                        <li>A practical example of <strong>AI-assisted development</strong></li>
+                    </ul>
+                </div>
+
+                <div class="help-section">
+                    <h3>🛠 How is it made?</h3>
+                    <p>Pure HTML, CSS and JavaScript — no frameworks, no dependencies. All puzzle generation happens locally in your browser using a backtracking algorithm.</p>
+                    <p>Created by <a href="https://github.com/mcronberg" target="_blank" rel="noopener">Michell Cronberg</a> with <a href="https://claude.ai" target="_blank" rel="noopener">Claude</a> (AI).</p>
+                </div>
+
+                <div class="help-section">
+                    <h3>📦 Version</h3>
+                    <p>v1.0.8</p>
+                </div>
+
+                <div class="help-section help-footer">
+                    <a href="https://github.com/mcronberg/Soduku" target="_blank" rel="noopener">View source on GitHub ↗</a>
+                </div>
+            </div>
+        </div>
+
         <!-- How to Play Modal -->
         <div id="helpModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
             <div class="modal-content">
@@ -235,7 +287,7 @@
         <div id="toastContainer" class="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>
     </div>
 
-    <script type="module" src="js/app.js?v=1.0.4"></script>
+    <script type="module" src="js/app.js?v=1.0.8"></script>
 </body>
 
 </html>
