@@ -3,7 +3,7 @@
  * Provides offline caching for the PWA
  */
 
-const CACHE_VERSION = '1.1.7';
+const CACHE_VERSION = '1.1.8';
 const CACHE_NAME = `sudoku-v${CACHE_VERSION}`;
 
 // Files to cache for offline use
