@@ -578,6 +578,8 @@ function updateNumPad(gridSize) {
         const num = parseInt(btn.dataset.num, 10);
         btn.style.display = (num === 0 || num <= gridSize) ? '' : 'none';
     });
+    const pad = document.querySelector('.number-pad');
+    if (pad) pad.dataset.gridsize = gridSize;
 }
 
 function showGameScreen() {
