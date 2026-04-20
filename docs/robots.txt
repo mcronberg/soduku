@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mcronberg.github.io/soduku/sitemap.xml
